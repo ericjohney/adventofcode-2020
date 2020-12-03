@@ -1,10 +1,10 @@
+use adventofcode2019::file_utils;
 use std::collections::HashSet;
 
 fn main() {
-    // let text = fs::read_to_string("inputs/day1.txt").unwrap();
-    let text = include_str!("../../inputs/day1.txt");
-    let expenses = text
-        .split_whitespace()
+    let lines = file_utils::lines("inputs/day1.txt");
+    let expenses = lines
+        .iter()
         .map(|s| str::parse::<i64>(s).unwrap())
         .collect();
 
@@ -16,7 +16,6 @@ fn part1(expenses: &Vec<i64>) {
     let find_pair = || {
         let mut seen = HashSet::new();
         let target = 2020;
-        let mut found = None;
 
         for i in 0..expenses.len() {
             let current = expenses[i] as i64;

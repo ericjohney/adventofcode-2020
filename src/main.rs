@@ -1,5 +1,5 @@
 fn main() {
-    let input = vec![10,9,8,7,5];
+    let input = vec![10, 9, 8, 7, 5];
     let maybe_profit = max_profit(&input);
     if maybe_profit.is_some() {
         let profit = maybe_profit.unwrap();
@@ -11,7 +11,6 @@ fn main() {
 }
 
 fn max_profit(prices: &Vec<u64>) -> Option<(u64, u64)> {
-
     let mut min_index = 0u64;
     let mut min_price = prices.first()?;
     let mut max_price = min_price;
