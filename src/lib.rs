@@ -3,6 +3,10 @@ pub mod file_utils {
     use regex::Regex;
     use std::fs;
 
+    pub fn read_to_string(filename: &'static str) -> String {
+        fs::read_to_string(filename).unwrap()
+    }
+
     pub fn lines(filename: &'static str) -> Vec<String> {
         fs::read_to_string(filename)
             .unwrap()
