@@ -26,10 +26,10 @@ fn part1(groups: &Vec<String>) {
 fn part2(groups: &Vec<String>) {
 	let mut yes_count = 0;
 	for group in groups {
-		let people = group
+		let people: Vec<HashSet<_>> = group
 			.split("\n")
-			.map(|person| person.chars().collect::<HashSet<_>>())
-			.collect::<Vec<_>>();
+			.map(|person| person.chars().collect())
+			.collect();
 
 		let mut shared = people[0].clone();
 		for person in people {
