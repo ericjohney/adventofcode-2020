@@ -1,4 +1,4 @@
-use adventofcode2019::file_utils;
+use adventofcode2020::file_utils;
 
 fn main() {
     let map = file_utils::lines("inputs/day3.txt");

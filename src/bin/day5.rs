@@ -1,4 +1,4 @@
-use adventofcode2019::file_utils;
+use adventofcode2020::file_utils;
 
 fn main() {
     let seats = file_utils::lines("inputs/day5.txt")
@@ -18,30 +18,36 @@ fn get_seat(location: &str) -> (i64, i64) {
         match instruction {
             'F' => {
                 rows = rows.start..(((rows.end - rows.start) / 2) + rows.start);
-            },
+            }
             'B' => {
                 rows = (((rows.end - rows.start) / 2) + rows.start + 1)..(rows.end);
-            },
+            }
             'L' => {
                 aisles = aisles.start..(((aisles.end - aisles.start) / 2) + aisles.start);
-            },
+            }
             'R' => {
                 aisles = (((aisles.end - aisles.start) / 2) + aisles.start + 1)..(aisles.end);
-            },
-            _ => {},
+            }
+            _ => {}
         }
     }
     return (rows.start, aisles.start);
 }
 
 fn part1(seats: &Vec<(i64, i64)>) {
-    let ids = seats.iter().map(|seat| seat.0 * 8 + seat.1).collect::<Vec<i64>>();
+    let ids = seats
+        .iter()
+        .map(|seat| seat.0 * 8 + seat.1)
+        .collect::<Vec<i64>>();
     let max_id = ids.iter().max().unwrap();
     println!("part1 max id {}", max_id);
 }
 
 fn part2(seats: &Vec<(i64, i64)>) {
-    let mut ids = seats.iter().map(|seat| seat.0 * 8 + seat.1).collect::<Vec<i64>>();
+    let mut ids = seats
+        .iter()
+        .map(|seat| seat.0 * 8 + seat.1)
+        .collect::<Vec<i64>>();
     ids.sort();
     let mut last_id = ids.pop().unwrap();
     let mut missing_id = 0;
