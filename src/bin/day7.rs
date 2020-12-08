@@ -13,11 +13,14 @@ fn main() {
 fn part1(associations: &Vec<String>) {
     let mut parents = HashMap::new();
     for association in associations {
-        let s = association.replace(" bags", "").replace(" bag", "");
+        let s = association
+            .replace(" bags", "")
+            .replace(" bag", "")
+            .trim_matches('.')
+            .to_string();
         let bags: Vec<_> = s.split(" contain ").collect();
         let parent = bags[0].trim();
         let children: HashSet<_> = bags[1]
-            .trim_matches('.')
             .split(", ")
             .map(|bag| bag.trim_matches(char::is_numeric).trim())
             .collect();
@@ -50,12 +53,12 @@ fn part1(associations: &Vec<String>) {
 
 fn part2(associations: &Vec<String>) {
     let mut bag_map = HashMap::new();
+    let line_match = Regex::new(r"(\d+) (.*?)(?:,|\.)").unwrap();
     for association in associations {
         let s = association.replace(" bags", "").replace(" bag", "");
-        let bags: Vec<_> = s.split(" contain ").collect();
+        let bags = s.split(" contain ").collect::<Vec<_>>();
         let parent = bags[0].trim();
-        let children = Regex::new(r"(\d+) (.*?)(?:,|\.)")
-            .unwrap()
+        let children = line_match
             .captures_iter(&bags[1])
             .map(|c| {
                 let count = str::parse::<i64>(&c[1]).unwrap();
@@ -68,12 +71,10 @@ fn part2(associations: &Vec<String>) {
     fn count_children(bag_map: &HashMap<String, HashMap<String, i64>>, color: &str) -> i64 {
         let mut count = 0;
         if let Some(p) = bag_map.get(color) {
-            if p.len() > 0 {
-                for (c, subcount) in p {
-                    count += subcount;
-                    for _ in 0..(*subcount as usize) {
-                        count += count_children(bag_map, c);
-                    }
+            for (c, subcount) in p {
+                count += subcount;
+                for _ in 0..(*subcount as usize) {
+                    count += count_children(bag_map, c);
                 }
             }
         }
