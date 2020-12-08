@@ -1,35 +1,67 @@
 use adventofcode2020::file_utils;
-use std::cmp::Eq;
 use std::collections::HashSet;
-use std::hash::{Hash, Hasher};
+
+#[derive(Debug, Clone)]
+struct Computer {
+    pointer: i64,
+    instructions: Vec<Instruction>,
+    accumulator: i64,
+}
 
 #[derive(Debug, Clone)]
 struct Instruction {
-    id: i64,
     operation: String,
     value: i64,
 }
 
-impl Hash for Instruction {
-    fn hash<H: Hasher>(&self, state: &mut H) {
-        self.id.hash(state);
+impl Computer {
+    fn new(instructions: &Vec<Instruction>) -> Computer {
+        return Computer {
+            pointer: 0i64,
+            accumulator: 0i64,
+            instructions: instructions.iter().cloned().collect(),
+        };
+    }
+
+    fn next_instruction(&self) -> Option<&Instruction> {
+        if self.pointer < self.instructions.len() as i64 {
+            return Some(&self.instructions[self.pointer as usize]);
+        }
+        None
+    }
+
+    fn has_completed(&self) -> bool {
+        self.pointer == self.instructions.len() as i64
+    }
+
+    fn run(&mut self) {
+        let mut seen = HashSet::new();
+        while let Some(instruction) = self.next_instruction() {
+            if seen.contains(&self.pointer) {
+                break;
+            }
+            seen.insert(self.pointer);
+
+            match instruction.operation.as_str() {
+                "acc" => {
+                    self.accumulator += instruction.value;
+                    self.pointer += 1;
+                }
+                "jmp" => {
+                    self.pointer += instruction.value;
+                }
+                _ => self.pointer += 1,
+            }
+        }
     }
 }
-impl PartialEq for Instruction {
-    fn eq(&self, other: &Self) -> bool {
-        self.id == other.id
-    }
-}
-impl Eq for Instruction {}
 
 fn main() {
     let instructions = file_utils::lines("inputs/day8.txt")
         .iter()
-        .enumerate()
-        .map(|(i, l)| {
-            let split = l.split(" ").collect::<Vec<_>>();
+        .map(|line| {
+            let split = line.split(" ").collect::<Vec<_>>();
             Instruction {
-                id: i as i64,
                 operation: split[0].to_string(),
                 value: str::parse::<i64>(&split[1].replace("+", "")).unwrap(),
             }
@@ -41,81 +73,42 @@ fn main() {
 }
 
 fn part1(instructions: &Vec<Instruction>) {
-    let mut accumulator = 0i64;
-    let mut pointer = 0i64;
-    let mut seen = HashSet::new();
-    while pointer < instructions.len() as i64 {
-        let instruction = &instructions[pointer as usize];
-        if seen.contains(instruction) {
-            break;
-        }
+    let mut computer = Computer::new(instructions);
+    computer.run();
 
-        match instruction.operation.as_str() {
-            "acc" => {
-                accumulator += instruction.value;
-                pointer += 1;
-            }
-            "jmp" => {
-                pointer += instruction.value;
-            }
-            _ => pointer += 1,
-        }
-        seen.insert(instruction);
-    }
-    println!("part 1 {:?}", accumulator);
+    println!("part 1 {:?}", computer.accumulator);
 }
 
 fn part2(instructions: &Vec<Instruction>) {
-    fn run_computer(instructions: &Vec<Instruction>) -> bool {
-        let mut accumulator = 0i64;
-        let mut pointer = 0i64;
-        let mut seen = HashSet::new();
-        while pointer < instructions.len() as i64 {
-            let instruction = &instructions[pointer as usize];
-            if seen.contains(instruction) {
-                return false;
-            }
-
-            let operation = instruction.operation.as_str();
-            match operation {
-                "acc" => {
-                    accumulator += instruction.value;
-                    pointer += 1;
-                }
-                "jmp" => {
-                    pointer += instruction.value;
-                }
-                _ => pointer += 1,
-            }
-            seen.insert(instruction);
-        }
-        println!("part 2 {}", accumulator);
-        return true;
-    }
-
     let mut result = false;
     let mut index = 0;
+    let mut last_accumulator = 0;
     while !result {
-        result = run_computer(
-            &instructions
-                .iter()
-                .map(|instruction| {
-                    let mut operation = instruction.operation.as_str();
-                    if instruction.id == index {
-                        operation = match operation {
-                            "jmp" => "nop",
-                            "nop" => "jmp",
-                            _ => operation,
-                        }
+        let new_instructions = &instructions
+            .iter()
+            .enumerate()
+            .map(|(id, instruction)| {
+                let mut operation = instruction.operation.as_str();
+                if id == index {
+                    operation = match operation {
+                        "jmp" => "nop",
+                        "nop" => "jmp",
+                        _ => operation,
                     }
-                    return Instruction {
-                        id: instruction.id,
-                        operation: operation.to_string(),
-                        value: instruction.value,
-                    };
-                })
-                .collect(),
-        );
+                }
+                return Instruction {
+                    operation: operation.to_string(),
+                    value: instruction.value,
+                };
+            })
+            .collect();
+
+        let mut computer = Computer::new(new_instructions);
+        computer.run();
+        result = computer.has_completed();
+
+        last_accumulator = computer.accumulator;
         index += 1;
     }
+    println!("part 2 {:?}", last_accumulator);
 }
