@@ -1,10 +1,10 @@
-use adventofcode2020::file_utils;
+use adventofcode2020::utils::file;
 use regex::Regex;
 use std::collections::HashMap;
 use std::collections::HashSet;
 
 fn main() {
-    let associations = file_utils::lines("inputs/day7.txt");
+    let associations = file::lines("inputs/day7.txt");
 
     part1(&associations);
     part2(&associations);

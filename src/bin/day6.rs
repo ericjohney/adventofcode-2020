@@ -1,8 +1,8 @@
-use adventofcode2020::file_utils;
+use adventofcode2020::utils::file;
 use std::collections::HashSet;
 
 fn main() {
-	let groups = file_utils::read_to_string("inputs/day6.txt")
+	let groups = file::read_to_string("inputs/day6.txt")
 		.split("\n\n")
 		.map(|group| group.to_string())
 		.collect();

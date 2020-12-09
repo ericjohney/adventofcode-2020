@@ -1,9 +1,9 @@
-use adventofcode2020::file_utils;
+use adventofcode2020::utils::file;
 use regex::Regex;
 use std::collections::HashMap;
 
 fn main() {
-    let passports = file_utils::read_to_string("inputs/day4.txt")
+    let passports = file::read_to_string("inputs/day4.txt")
         .trim()
         .split("\n\n")
         .map(|passport| {

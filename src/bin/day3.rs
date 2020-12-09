@@ -1,7 +1,7 @@
-use adventofcode2020::file_utils;
+use adventofcode2020::utils::file;
 
 fn main() {
-    let map = file_utils::lines("inputs/day3.txt");
+    let map = file::lines("inputs/day3.txt");
 
     part1(&map);
     part2(&map);

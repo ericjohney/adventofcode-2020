@@ -1,4 +1,4 @@
-use adventofcode2020::file_utils;
+use adventofcode2020::utils::utils::file;
 use std::collections::HashSet;
 
 #[derive(Debug, Clone)]
@@ -57,7 +57,7 @@ impl Computer {
 }
 
 fn main() {
-    let instructions = file_utils::lines("inputs/day8.txt")
+    let instructions = file::lines("inputs/day8.txt")
         .iter()
         .map(|line| {
             let split = line.split(" ").collect::<Vec<_>>();

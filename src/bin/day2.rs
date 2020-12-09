@@ -1,6 +1,6 @@
 extern crate regex;
 
-use adventofcode2020::file_utils;
+use adventofcode2020::utils::file;
 use std::collections::HashMap;
 use std::ops::RangeInclusive;
 
@@ -12,7 +12,7 @@ struct Line {
 }
 
 fn main() {
-    let lines = file_utils::parse_lines("inputs/day2.txt", r"(?m)(\d+)-(\d+) (\w): (\w+)")
+    let lines = file::parse_lines("inputs/day2.txt", r"(?m)(\d+)-(\d+) (\w): (\w+)")
         .iter()
         .map(|c| Line {
             start: str::parse::<i64>(&c[1]).unwrap(),

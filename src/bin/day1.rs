@@ -1,8 +1,8 @@
-use adventofcode2020::file_utils;
+use adventofcode2020::utils::file;
 use std::collections::HashSet;
 
 fn main() {
-    let lines = file_utils::lines("inputs/day1.txt");
+    let lines = file::lines("inputs/day1.txt");
     let expenses = lines
         .iter()
         .map(|s| str::parse::<i64>(s).unwrap())

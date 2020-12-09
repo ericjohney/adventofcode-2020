@@ -1,7 +1,7 @@
-use adventofcode2020::file_utils;
+use adventofcode2020::utils::file;
 
 fn main() {
-    let seats = file_utils::lines("inputs/day5.txt")
+    let seats = file::lines("inputs/day5.txt")
         .iter()
         .map(|location| get_seat(location))
         .collect();
