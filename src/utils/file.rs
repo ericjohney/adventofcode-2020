@@ -9,7 +9,7 @@ pub fn lines(filename: &'static str) -> Vec<String> {
 	fs::read_to_string(filename)
 		.unwrap()
 		.lines()
-		.map(|l| l.into())
+		.map(|l| l.to_string())
 		.collect()
 }
 

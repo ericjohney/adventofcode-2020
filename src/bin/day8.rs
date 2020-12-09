@@ -1,4 +1,4 @@
-use adventofcode2020::utils::utils::file;
+use adventofcode2020::utils::file;
 use std::collections::HashSet;
 
 #[derive(Debug, Clone)]
